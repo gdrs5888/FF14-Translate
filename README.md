@@ -12,4 +12,6 @@ FF14 Translate Tool
 
 5.更新檢查
 
+6.偵測遊戲路徑(僅首次使用需執行)
+
 參考來源:https://github.com/GpointChen/FFXIVChnTextPatch-GP
