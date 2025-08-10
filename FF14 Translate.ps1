@@ -18,25 +18,25 @@ $FileName_Translate = $LatestRelease.assets[1].name
 $FileName_Restore = $LatestRelease.assets[0].name
 $url_Translate = "https://github.com/$RepoOwner/$RepoName/releases/download/$Version/$FileName_Translate"
 $url_Restore = "https://github.com/$RepoOwner/$RepoName/releases/download/$Version/$FileName_Restore"
-$Test_Path_Translate = "$env:USERPROFILE\Desktop\FF14 Translate\$FileName_Translate"
-$Test_Path_Restore = "$env:USERPROFILE\Desktop\FF14 Translate\$FileName_Restore"
-$2 = Get-Content -Path "$env:USERPROFILE\Desktop\FF14 Translate\Version.txt"
+$Test_Path_Translate = "$PSScriptRoot\$FileName_Translate"
+$Test_Path_Restore = "$PSScriptRoot\$FileName_Restore"
+$2 = Get-Content -Path "$PSScriptRoot\Version.txt"
 $userchoose = Read-Host "請輸入選項"
 switch($userchoose)
 {
 1
 {
  Write-Host "正在下載更新" 
- curl.exe -L -O $url_Translate "$env:USERPROFILE\Desktop\FF14 Translate"
+ curl.exe -L -O $url_Translate "$PSScriptRoot"
   if (Test-Path $Test_Path_Translate)
   {
   Write-Host "下載完成，正在解壓縮..."
-  7z x "$env:USERPROFILE\Desktop\FF14 Translate\$FileName_Translate" -o"D:\SquareEnix\FINAL FANTASY XIV - A Realm Reborn\game\sqpack\Translate File" -y
+  7z x "$PSScriptRoot\$FileName_Translate" -o"D:\SquareEnix\FINAL FANTASY XIV - A Realm Reborn\game\sqpack\Translate File" -y
   Write-Host "安裝漢化資源..."
   Get-ChildItem "D:\SquareEnix\FINAL FANTASY XIV - A Realm Reborn\game\sqpack\Translate File" | copy -Destination "D:\SquareEnix\FINAL FANTASY XIV - A Realm Reborn\game\sqpack\ffxiv" -Recurse -Force
-  Remove-Item -Path "$env:USERPROFILE\Desktop\FF14 Translate\$FileName_Translate" -Recurse -Force
+  Remove-Item -Path "$PSScriptRoot\$FileName_Translate" -Recurse -Force
   Write-Host "漢化完成!" -ForegroundColor Green
-  Set-Content -Path "$env:USERPROFILE\Desktop\FF14 Translate\Version.txt" -Value "$Version"
+  Set-Content -Path "$PSScriptRoot\Version.txt" -Value "$Version"
   timeout /t -1
   }
   else
@@ -63,14 +63,14 @@ timeout /t -1
 3
 {
 Write-Host "正在下載還原檔案"
- curl.exe -L -O $Url_Restore "$env:USERPROFILE\Desktop\FF14 Translate"
+ curl.exe -L -O $Url_Restore "$PSScriptRoot"
   if (Test-Path $Test_Path_Restore)
   {
   Write-Host "下載完成，正在解壓縮..."
-  7z x "$env:USERPROFILE\Desktop\FF14 Translate\$FileName_Restore" -o"D:\SquareEnix\FINAL FANTASY XIV - A Realm Reborn\game\sqpack\Restore File" -y
+  7z x "$PSScriptRoot\$FileName_Restore" -o"D:\SquareEnix\FINAL FANTASY XIV - A Realm Reborn\game\sqpack\Restore File" -y
   Write-Host "安裝還原資源..."
   Get-ChildItem "D:\SquareEnix\FINAL FANTASY XIV - A Realm Reborn\game\sqpack\Restore File" | copy -Destination "D:\SquareEnix\FINAL FANTASY XIV - A Realm Reborn\game\sqpack\ffxiv" -Recurse -Force
-  Remove-Item -Path "$env:USERPROFILE\Desktop\FF14 Translate\$FileName_Restore" -Recurse -Force
+  Remove-Item -Path "$PSScriptRoot\$FileName_Restore" -Recurse -Force
   Write-Host "還原完成!" -ForegroundColor Green
   timeout /t -1
   }
