@@ -37,7 +37,6 @@ $url_Translate = "https://github.com/$RepoOwner/$RepoName/releases/download/$Ver
 $url_Restore = "https://github.com/$RepoOwner/$RepoName/releases/download/$Version/$FileName_Restore"
 $Test_Path_Translate = "$PSScriptRoot\$FileName_Translate"
 $Test_Path_Restore = "$PSScriptRoot\$FileName_Restore"
-$2 = Get-Content -Path "$PSScriptRoot\Version.txt"
 do
 {
 cls
@@ -118,6 +117,7 @@ timeout /t -1
 }
 5
 {
+$2 = Get-Content -Path "$PSScriptRoot\Version.txt"
 foreach($1 in $2)
 {
 if($1 -ne $Version)
