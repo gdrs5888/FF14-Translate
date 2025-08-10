@@ -5,27 +5,8 @@
 3.線上還原(從網路下載資源)
 4.離線還原(從本地讀取資源)
 5.更新檢查
+6.偵測遊戲路徑(僅首次使用需執行)
 "@
-Write-Host "辨識遊戲路徑中,請稍後..."
-$tailPath = "FINAL FANTASY XIV - A Realm Reborn\game\sqpack\ffxiv"
-$drives = Get-PSDrive -PSProvider FileSystem | Where-Object { $_.Free -gt 0 }
-foreach ($drive in $drives) 
-{
-try
-{
-$squareEnixDirs = Get-ChildItem -Path $drive.Root -Directory -Filter "SquareEnix" -Recurse -ErrorAction SilentlyContinue
-foreach ($dir in $squareEnixDirs)
-{
-$ffxivPath = Join-Path $dir.FullName "FINAL FANTASY XIV - A Realm Reborn"
-if (-not (Test-Path $ffxivPath -PathType Container)) 
-{
-continue
-}
-$targetPath = Join-Path $dir.FullName $tailPath
-}
-}
-catch{}
-}
 $env:Path += ";C:\Program Files\7-Zip"
 $RepoOwner = "GpointChen"
 $RepoName = "FFXIVChnTextPatch-GP"
@@ -46,6 +27,7 @@ switch($userchoose)
 {
 1
 {
+$Game_Path = Get-Content -Path "$PSScriptRoot\Game Path.txt"
  Write-Host "正在下載漢化檔案，若速度緩慢請嘗試重新下載" -ForegroundColor Yellow
  curl.exe -L -O $url_Translate "$PSScriptRoot"
   if (Test-Path $Test_Path_Translate)
@@ -53,7 +35,7 @@ switch($userchoose)
   Write-Host "下載完成，正在解壓縮..."
   7z x "$PSScriptRoot\$FileName_Translate" -o"$PSScriptRoot\Local File\Translate" -y
   Write-Host "安裝漢化資源..."
-  Get-ChildItem "$PSScriptRoot\Local File\Translate" | copy -Destination "$targetPath" -Recurse -Force
+  Get-ChildItem "$PSScriptRoot\Local File\Translate" | copy -Destination "$Game_Path" -Recurse -Force
   Remove-Item -Path "$PSScriptRoot\$FileName_Translate" -Recurse -Force
   Write-Host "漢化完成!" -ForegroundColor Green
   Set-Content -Path "$PSScriptRoot\Version.txt" -Value "$Version"
@@ -67,6 +49,7 @@ switch($userchoose)
  }
 2
 {
+$Game_Path = Get-Content -Path "$PSScriptRoot\Game Path.txt"
 $files_Translate = Get-ChildItem -Path "$PSScriptRoot\Local File\Translate" -ErrorAction SilentlyContinue
 if($files_Translate.Count -eq 0)
 {
@@ -75,13 +58,14 @@ timeout /t -1
 }
 else
 {
-Get-ChildItem -Path "$PSScriptRoot\Local File\Translate" | copy -Destination "$targetPath" -Recurse -Force
+Get-ChildItem -Path "$PSScriptRoot\Local File\Translate" | copy -Destination "$Game_Path" -Recurse -Force
 Write-Host "漢化完成!" -ForegroundColor Green
 timeout /t -1
 }
 }
 3
 {
+$Game_Path = Get-Content -Path "$PSScriptRoot\Game Path.txt"
 Write-Host "正在下載還原檔案，若速度緩慢請嘗試重新下載" -ForegroundColor Yellow
  curl.exe -L -O $Url_Restore "$PSScriptRoot"
   if (Test-Path $Test_Path_Restore)
@@ -89,7 +73,7 @@ Write-Host "正在下載還原檔案，若速度緩慢請嘗試重新下載" -Fo
   Write-Host "下載完成，正在解壓縮..."
   7z x "$PSScriptRoot\$FileName_Restore" -o"$PSScriptRoot\Local File\Restore" -y
   Write-Host "安裝還原資源..."
-  Get-ChildItem "$PSScriptRoot\Local File\Restore" | copy -Destination "$targetPath" -Recurse -Force
+  Get-ChildItem "$PSScriptRoot\Local File\Restore" | copy -Destination "$Game_Path" -Recurse -Force
   Remove-Item -Path "$PSScriptRoot\$FileName_Restore" -Recurse -Force
   Write-Host "還原完成!" -ForegroundColor Green
   timeout /t -1
@@ -102,6 +86,7 @@ Write-Host "正在下載還原檔案，若速度緩慢請嘗試重新下載" -Fo
 }
 4
 {
+$Game_Path = Get-Content -Path "$PSScriptRoot\Game Path.txt"
 $files_Restore = Get-ChildItem "$PSScriptRoot\Local File\Restore" -ErrorAction SilentlyContinue
 if($files_Restore.Count -eq 0)
 {
@@ -110,7 +95,7 @@ timeout /t -1
 }
 else
 {
-Get-ChildItem "$PSScriptRoot\Local File\Restore" | copy -Destination "$targetPath" -Recurse -Force
+Get-ChildItem "$PSScriptRoot\Local File\Restore" | copy -Destination "$Game_Path" -Recurse -Force
 Write-Host "還原完成!" -ForegroundColor Green
 timeout /t -1
 }
@@ -131,6 +116,32 @@ if($1 -ne $Version)
  timeout /t -1
  }
 }
+}
+6
+{
+Write-Host "偵測遊戲路徑中,請稍後..."
+$tailPath = "FINAL FANTASY XIV - A Realm Reborn\game\sqpack\ffxiv"
+$drives = Get-PSDrive -PSProvider FileSystem | Where-Object { $_.Free -gt 0 }
+foreach ($drive in $drives) 
+{
+try
+{
+$squareEnixDirs = Get-ChildItem -Path $drive.Root -Directory -Filter "SquareEnix" -Recurse -ErrorAction SilentlyContinue
+foreach ($dir in $squareEnixDirs)
+{
+$ffxivPath = Join-Path $dir.FullName "FINAL FANTASY XIV - A Realm Reborn"
+if (-not (Test-Path $ffxivPath -PathType Container)) 
+{
+continue
+}
+$targetPath = Join-Path $dir.FullName $tailPath
+}
+}
+catch{}
+}
+Set-Content -Path "$PSScriptRoot\Game Path.txt" -Value "$targetPath"
+Write-Host "偵測完成!"
+timeout /t -1
 }
 default
 {
