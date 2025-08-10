@@ -10,6 +10,7 @@ do
 {
 cls
 Write-Host "$menu"
+$env:Path += ";C:\Program Files\7-Zip"
 $RepoOwner = "GpointChen"
 $RepoName = "FFXIVChnTextPatch-GP"
 $LatestRelease = Invoke-RestMethod "https://api.github.com/repos/$RepoOwner/$RepoName/releases/latest"
