@@ -1,11 +1,9 @@
 ﻿$menu =
 @"
-1.線上漢化(從網路下載資源)
-2.離線漢化(從本地讀取資源)
-3.線上還原(從網路下載資源)
-4.離線還原(從本地讀取資源)
-5.更新檢查
-6.偵測遊戲路徑
+1.漢化
+2.還原
+3.更新檢查
+4.偵測遊戲路徑
 #為確保運作正常，首次使用需先偵測遊戲路徑(僅需執行一次)!
 "@
 $env:Path += ";C:\Program Files\7-Zip"
@@ -48,7 +46,7 @@ $Game_Path = Get-Content -Path "$PSScriptRoot\Game Path.txt"
   timeout /t -1
   }
  }
-2
+Deprecated_0
 {
 $Game_Path = Get-Content -Path "$PSScriptRoot\Game Path.txt"
 $files_Translate = Get-ChildItem -Path "$PSScriptRoot\Local File\Translate" -ErrorAction SilentlyContinue
@@ -64,7 +62,7 @@ Write-Host "漢化完成!" -ForegroundColor Green
 timeout /t -1
 }
 }
-3
+2
 {
 $Game_Path = Get-Content -Path "$PSScriptRoot\Game Path.txt"
 Write-Host "正在下載還原檔案，若速度緩慢請嘗試重新下載" -ForegroundColor Yellow
@@ -85,7 +83,7 @@ Write-Host "正在下載還原檔案，若速度緩慢請嘗試重新下載" -Fo
   timeout /t -1
   }
 }
-4
+Deprecated_1
 {
 $Game_Path = Get-Content -Path "$PSScriptRoot\Game Path.txt"
 $files_Restore = Get-ChildItem "$PSScriptRoot\Local File\Restore" -ErrorAction SilentlyContinue
@@ -101,7 +99,7 @@ Write-Host "還原完成!" -ForegroundColor Green
 timeout /t -1
 }
 }
-5
+3
 {
 $2 = Get-Content -Path "$PSScriptRoot\Version.txt"
 foreach($1 in $2)
@@ -118,7 +116,7 @@ if($1 -ne $Version)
  }
 }
 }
-6
+4
 {
 Write-Host "偵測遊戲路徑中,請稍後..."
 $tailPath = "FINAL FANTASY XIV - A Realm Reborn\game\sqpack\ffxiv"
